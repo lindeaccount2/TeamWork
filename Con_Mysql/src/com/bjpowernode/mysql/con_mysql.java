@@ -1,6 +1,7 @@
 package com.bjpowernode.mysql;
 
 import java.sql.*;
+import java.util.Random;
 
 public class con_mysql {
 	//这里是MySQLDemo 类
@@ -68,15 +69,30 @@ public class con_mysql {
             }
             
             // 3.修改class1表，录入“缺勤”的记录
-            int ab=0;
-            while(ab<1) {
-                sql = "update class1 set attendance=0 where id=1";
+            Random r = new Random();		//生成一个对象 r,利用随机数对象r来调用随机数函数
+            
+            int ab=1;
+            int b;				//存放随机数
+            while(ab<=1) {
+            	b= r.nextInt(15);   //调用 r 对象下面的nextInt，生成[0,10)之间的随机数，将结果传给 b
+                sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            
+            while(ab<=4) {
+            	b=r.nextInt(45)+15;
+                sql = "update class1 set attendance=0 where id="+b+" ";
+                stmt.executeUpdate(sql);
+                ab++;
+            }
+            while(ab<=7) {
+            	b=r.nextInt(30)+60;
+                sql = "update class1 set attendance=0 where id="+b+" ";
+                stmt.executeUpdate(sql);
+                ab++;
+            }
             // 4.表Student的查询
-            sql = "select id,score,attendance from class1";
+            sql = "select id,score,attendance from class1 where attendance=0";
             ResultSet rs = stmt.executeQuery(sql);	//executeQuery()把数据库响应的查询结果存放在ResultSet类对象中供我们使用
         
             // 展开结果集数据库
@@ -85,7 +101,7 @@ public class con_mysql {
                 int id  = rs.getInt("id");
                 String s=rs.getString("score");
                 int attendance = rs.getInt("attendance");
-    
+                
                 // 输出数据
                 System.out.print("ID: " + id);
                 System.out.print(", 绩点:" + s);
@@ -94,8 +110,8 @@ public class con_mysql {
             }
             
             // 将名单存入文件 ------“数据集”？？？
-            sql = " SELECT * FROM  work.class1  INTO  OUTFILE 'F:Vscode/github-Clone/TeamWork/data/class1/class1.txt' ";
-            stmt.executeQuery(sql);
+            //sql = " SELECT * FROM  work.class1  INTO  OUTFILE 'F:Vscode/github-Clone/TeamWork/data/class1/class1.txt' ";
+            //stmt.executeQuery(sql);
             // 完成后关闭
             rs.close();
             stmt.close();
