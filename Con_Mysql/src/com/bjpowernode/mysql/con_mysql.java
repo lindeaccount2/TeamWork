@@ -73,19 +73,19 @@ public class con_mysql {
             
             int ab=1;
             int b;				//存放随机数
-            while(ab<=1) {
+            while(ab<=1) {      //绩点大于3的同学在随机有1名同学缺勤
             	b= r.nextInt(15);   //调用 r 对象下面的nextInt，生成[0,10)之间的随机数，将结果传给 b
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=4) {
+            while(ab<=4) {      //绩点大于2的同学在随机有3名同学缺勤
             	b=r.nextInt(45)+15;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=7) {
+            while(ab<=7) {      //绩点大于1的同学在随机有3名同学缺勤
             	b=r.nextInt(30)+60;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);

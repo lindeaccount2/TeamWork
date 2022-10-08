@@ -1,22 +1,10 @@
 package com.bjpowernode.mysql;
 
 import java.sql.*;
+import java.util.Random;
 
 public class Selection {
-	//这里是MySQLDemo 类
-	/*
-	*java连接mysql数据库
-	*1、加载驱动程序
-	*2、数据库连接字符串"jdbc:mysql://localhost:3306/数据库名?"
-	*3、数据库登录名
-	*3、数据库登录密码
-	*/	
-				
-	// MySQL 8.0 以下版本 - JDBC 驱动名及数据库 URL
-	//static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	// static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB";
- 
-    // MySQL 8.0 以上版本 - JDBC 驱动名及数据库 URL
+
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
     static final String DB_URL = "jdbc:mysql://localhost:3306/work?useSSL=false&serverTimezone=UTC";
  
@@ -41,30 +29,60 @@ public class Selection {
             stmt = conn.createStatement();		//创建一个statement对象，用来封装sql语句传送给数据库
             String sql;
             
-            sql = " SELECT * FROM  work.class1  INTO  OUTFILE 'F:mysql/class1.txt' ";
-            stmt.executeQuery(sql);
+            //随机抽点
+            Random r = new Random();
+            int b;
+            int count=0;
+            ResultSet rs;
             
-            /*
-            // 4.表Student的查询
-            sql = "select id,score,attendance from class1";
-            ResultSet rs = stmt.executeQuery(sql);	//executeQuery()把数据库响应的查询结果存放在ResultSet类对象中供我们使用
-        
-            // 展开结果集数据库
-            while(rs.next()){
-                // 通过字段检索
-                int id  = rs.getInt("id");
-                String s=rs.getString("score");
-                int attendance = rs.getInt("attendance");
-    
-                // 输出数据
-                System.out.print("ID: " + id);
-                System.out.print(", 绩点:" + s);
-                System.out.print(", 出勤情况: " + attendance);
-                System.out.print("\n");
+            while(true) {
+            	b=r.nextInt(15);
+            	sql = "select id,score,attendance from class1 where id="+b+" ";
+                rs = stmt.executeQuery(sql);	
+                if(rs.next()) {
+                	int id  = rs.getInt("id");
+                    String s=rs.getString("score");
+                    int attendance = rs.getInt("attendance");
+                    count++;
+                    if(attendance==0) {
+                    	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                    	 break;
+                    }
+                }
             }
-            
+            while(true) {
+            	b=r.nextInt(45)+15;
+            	sql = "select id,score,attendance from class1 where id="+b+" ";
+                rs = stmt.executeQuery(sql);	
+                if(rs.next()) {
+                	int id  = rs.getInt("id");
+                    String s=rs.getString("score");
+                    int attendance = rs.getInt("attendance");
+                    count++;
+                    if(attendance==0) {
+                    	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                    	 break;
+                    }
+                }
+            }
+            while(true) {
+            	b=r.nextInt(30)+60;
+            	sql = "select id,score,attendance from class1 where id="+b+" ";
+                rs = stmt.executeQuery(sql);	
+                if(rs.next()) {
+                	int id  = rs.getInt("id");
+                    String s=rs.getString("score");
+                    int attendance = rs.getInt("attendance");
+                    count++;
+                    if(attendance==0) {
+                    	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                    	 break;
+                    }
+                }
+            }
+            System.out.println("E = " + 3.0/count);
             // 完成后关闭
-            rs.close();*/
+            rs.close();
             stmt.close();
             conn.close();
         }catch(SQLException se){
