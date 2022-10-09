@@ -32,18 +32,23 @@ public class Selection {
             //随机抽点
             Random r = new Random();
             int b;
-            int count=0;
+            int count1=0;
+            int count2=0;
+            int count3=0;
+            int[] vis = new int[91];		//下表即代表学号，范围[1,90],vis[]=1表示在本次抽点中已被抽点过
             ResultSet rs;
             
             while(true) {
-            	b=r.nextInt(15);
+            	b=r.nextInt(15)+1;	//随机范围[0,15)
+            	if(vis[b]==1) continue;
+            	vis[b]=1;
             	sql = "select id,score,attendance from class1 where id="+b+" ";
                 rs = stmt.executeQuery(sql);	
                 if(rs.next()) {
                 	int id  = rs.getInt("id");
                     String s=rs.getString("score");
                     int attendance = rs.getInt("attendance");
-                    count++;
+                    count1++;
                     if(attendance==0) {
                     	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
                     	 break;
@@ -51,14 +56,16 @@ public class Selection {
                 }
             }
             while(true) {
-            	b=r.nextInt(45)+15;
+            	b=r.nextInt(45)+16;
+            	if(vis[b]==1) continue;
+            	vis[b]=1;
             	sql = "select id,score,attendance from class1 where id="+b+" ";
                 rs = stmt.executeQuery(sql);	
                 if(rs.next()) {
                 	int id  = rs.getInt("id");
                     String s=rs.getString("score");
                     int attendance = rs.getInt("attendance");
-                    count++;
+                    count2++;
                     if(attendance==0) {
                     	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
                     	 break;
@@ -66,21 +73,24 @@ public class Selection {
                 }
             }
             while(true) {
-            	b=r.nextInt(30)+60;
+            	b=r.nextInt(30)+61;
+            	if(vis[b]==1) continue;
+            	vis[b]=1;
             	sql = "select id,score,attendance from class1 where id="+b+" ";
                 rs = stmt.executeQuery(sql);	
                 if(rs.next()) {
                 	int id  = rs.getInt("id");
                     String s=rs.getString("score");
                     int attendance = rs.getInt("attendance");
-                    count++;
+                    count3++;
                     if(attendance==0) {
                     	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
                     	 break;
                     }
                 }
             }
-            System.out.println("E = " + 3.0/count);
+            System.out.println("count1="+ count1 + ", count2=" + count2 + ", count3=" + count3);
+            System.out.println("E = " + 3.0/(count1+count2+count3));
             // 完成后关闭
             rs.close();
             stmt.close();
