@@ -109,9 +109,10 @@ public class con_mysql {
                 System.out.print("\n");
             }
             
-            // 将名单存入文件 ------“数据集”？？？
-            //sql = " SELECT * FROM  work.class1  INTO  OUTFILE 'F:Vscode/github-Clone/TeamWork/data/class1/class1.txt' ";
-            //stmt.executeQuery(sql);
+            // 将名单存入文件 ------“数据集”
+            sql = " SELECT * FROM  work.class1  INTO  OUTFILE 'F:Vscode/github-Clone/TeamWork/data/class1/class1.txt' ";
+            stmt.executeQuery(sql);
+            
             // 完成后关闭
             rs.close();
             stmt.close();
