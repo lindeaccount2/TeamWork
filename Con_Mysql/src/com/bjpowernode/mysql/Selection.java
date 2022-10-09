@@ -7,8 +7,7 @@ public class Selection {
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
     static final String DB_URL = "jdbc:mysql://localhost:3306/work?useSSL=false&serverTimezone=UTC";
- 
- 
+  
     // 数据库的用户名与密码，需要根据自己的设置
     static final String USER = "root";
     static final String PASS = "123456";
@@ -38,6 +37,7 @@ public class Selection {
             int[] vis = new int[91];		//下表即代表学号，范围[1,90],vis[]=1表示在本次抽点中已被抽点过
             ResultSet rs;
             
+            //抽点 3.* 层次的学生
             while(true) {
             	b=r.nextInt(15)+1;	//随机范围[0,15)
             	if(vis[b]==1) continue;
@@ -55,6 +55,8 @@ public class Selection {
                     }
                 }
             }
+            
+            //抽点 2.* 层次的学生
             while(true) {
             	b=r.nextInt(45)+16;
             	if(vis[b]==1) continue;
@@ -71,7 +73,11 @@ public class Selection {
                     	 break;
                     }
                 }
+                if(count2==18) break;		//对抽点人数进行约束，如果抽了18个人还没抽到，就别抽了
+                							//因为另外两层的平均抽取次数是8、10，第二层如果抽了18个人还没抽到，E=2/36
+                							//已经等于全点情况的E值，是最差的情况了
             }
+            //抽点 1.* 层次的学生
             while(true) {
             	b=r.nextInt(30)+61;
             	if(vis[b]==1) continue;
@@ -89,8 +95,12 @@ public class Selection {
                     }
                 }
             }
+            
+            //在控制台输出结果
             System.out.println("count1="+ count1 + ", count2=" + count2 + ", count3=" + count3);
             System.out.println("E = " + 3.0/(count1+count2+count3));
+            
+            
             // 完成后关闭
             rs.close();
             stmt.close();

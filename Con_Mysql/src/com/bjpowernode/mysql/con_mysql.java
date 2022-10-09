@@ -79,13 +79,13 @@ public class con_mysql {
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=4) {      //绩点大于2的同学在随机有3名同学缺勤
+            while(ab<=2) {      //绩点大于2的同学在随机有3名同学缺勤
             	b=r.nextInt(45)+15;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=7) {      //绩点大于1的同学在随机有3名同学缺勤
+            while(ab<=5) {      //绩点大于1的同学在随机有3名同学缺勤
             	b=r.nextInt(30)+60;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
