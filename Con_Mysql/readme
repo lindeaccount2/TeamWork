@@ -1,1 +1,9 @@
-
+（一） bin文件夹
+ 存放编译文件
+（二） libs文件夹
+ 存放从外引入的包（比如mysql数据库驱动包）
+（三） src文件夹
+ 存放程序代码
+      1.com/bjpowernode/mysql/con_mysql.java -------数据集生成器
+      2.com/bjpowernode/mysql/Selection.java -------算法程序
+      3.com/bjpowernode/mysql/data           -------存放各个班级的出勤数据（虽然只生成了class1的数据，但其实五个班级数据都可以用同一个数据集生成器生成）
