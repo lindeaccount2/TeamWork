@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Random;
 
 public class con_mysql {
+	
 	//这里是MySQLDemo 类
 	/*
 	*java连接mysql数据库
@@ -79,13 +80,13 @@ public class con_mysql {
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=2) {      //绩点大于2的同学在随机有3名同学缺勤
+            while(ab<=3) {      //绩点大于2的同学在随机有3名同学缺勤
             	b=r.nextInt(45)+15;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
                 ab++;
             }
-            while(ab<=5) {      //绩点大于1的同学在随机有3名同学缺勤
+            while(ab<=6) {      //绩点大于1的同学在随机有3名同学缺勤
             	b=r.nextInt(30)+60;
                 sql = "update class1 set attendance=0 where id="+b+" ";
                 stmt.executeUpdate(sql);
