@@ -26,7 +26,9 @@ public class con_mysql {
     // 数据库的用户名与密码，需要根据自己的设置
     static final String USER = "root";
     static final String PASS = "123456";
- 
+    static int record[] = new int[6];
+    static int first=1;
+    
     public static void main(String[] args) {
         Connection conn = null;
         Statement stmt = null;
@@ -69,28 +71,74 @@ public class con_mysql {
             	count++;
             }
             
-            // 3.修改class1表，录入“缺勤”的记录
+            int vis[] = new int[91];
             Random r = new Random();		//生成一个对象 r,利用随机数对象r来调用随机数函数
-            
             int ab=1;
             int b;				//存放随机数
-            while(ab<=1) {      //绩点大于3的同学在随机有1名同学缺勤
-            	b= r.nextInt(15);   //调用 r 对象下面的nextInt，生成[0,10)之间的随机数，将结果传给 b
-                sql = "update class1 set attendance=0 where id="+b+" ";
-                stmt.executeUpdate(sql);
-                ab++;
+            
+            if(first==1) {
+                // 3.修改class1表，录入“缺勤”的记录
+                while(ab<=1) {      //绩点大于3的同学在随机有1名同学缺勤
+                	b= r.nextInt(15)+1;   //调用 r 对象下面的nextInt，生成[0,10)之间的随机数，将结果传给 b
+                	if(vis[b]==1) continue;
+                	vis[b]=1;
+                    sql = "update class1 set attendance=0 where id="+b+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+                }
+                while(ab<=3) {      //绩点大于2的同学在随机有3名同学缺勤
+                	b=r.nextInt(45)+16;
+                	if(vis[b]==1) continue;
+                	vis[b]=1;
+                    sql = "update class1 set attendance=0 where id="+b+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+                }
+                while(ab<=6) {      //绩点大于1的同学在随机有3名同学缺勤
+                	b=r.nextInt(30)+61;
+                	if(vis[b]==1) continue;
+                	vis[b]=1;
+                    sql = "update class1 set attendance=0 where id="+b+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+                }
+                first=0;
             }
-            while(ab<=3) {      //绩点大于2的同学在随机有3名同学缺勤
-            	b=r.nextInt(45)+15;
-                sql = "update class1 set attendance=0 where id="+b+" ";
-                stmt.executeUpdate(sql);
-                ab++;
+            else {
+            	while(ab<=4) {
+            		b=r.nextInt(6);
+            		if(vis[record[b]]==1) continue;
+            		vis[record[b]]=1;
+            		int a=record[b];
+            		sql = "update class1 set attendance=0 where id="+a+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+            	}
+            	
+                while(ab<=5) {      //绩点大于2的同学在随机有3名同学缺勤
+                	b=r.nextInt(45)+16;
+                	if(vis[b]==1) continue;
+                	vis[b]=1;
+                    sql = "update class1 set attendance=0 where id="+b+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+                }
+                while(ab<=6) {      //绩点大于1的同学在随机有3名同学缺勤
+                	b=r.nextInt(30)+61;
+                	if(vis[b]==1) continue;
+                	vis[b]=1;
+                    sql = "update class1 set attendance=0 where id="+b+" ";
+                    stmt.executeUpdate(sql);
+                    ab++;
+                }
             }
-            while(ab<=6) {      //绩点大于1的同学在随机有3名同学缺勤
-            	b=r.nextInt(30)+60;
-                sql = "update class1 set attendance=0 where id="+b+" ";
-                stmt.executeUpdate(sql);
-                ab++;
+            
+            Selection t=new Selection();
+            t.recall(record);
+
+            int j=0;
+            for(int i=0;i<91;i++) {
+            	if(vis[i]==1) record[j++]=i;
             }
             // 4.表Student的查询
             sql = "select id,score,attendance from class1 where attendance=0";
@@ -140,4 +188,3 @@ public class con_mysql {
     }	
 
 }
-
