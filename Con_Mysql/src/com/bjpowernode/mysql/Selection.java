@@ -47,8 +47,8 @@ public class Selection {
                 //抽点 3.* 层次的学生
                 while(true) {
                 	b=r.nextInt(15)+1;	//随机范围[0,15)
-                	if(vis[b]==1) vis[b]=1;
-                	if(vis[b]==1) continue;
+                	if(vis[b]==2) vis[b]=1;
+                	else if(vis[b]==1) continue;
 
                 	vis[b]=1;
                 	sql = "select id,score,attendance from class1 where id="+b+" ";
@@ -72,8 +72,8 @@ public class Selection {
     											//因为另外两层的平均抽取次数是8、10，第二层如果抽了18个人还没抽到
     											//E=2/36,已经等于全点情况的E值，是最差的情况了
                 	b=r.nextInt(45)+16;
-                	if(vis[b]==1) vis[b]=1;
-                	if(vis[b]==1) continue;
+                	if(vis[b]==2) vis[b]=1;
+                	else if(vis[b]==1) continue;
 
                 	vis[b]=1;
                 	sql = "select id,score,attendance from class1 where id="+b+" ";
@@ -94,8 +94,8 @@ public class Selection {
                 //抽点 1.* 层次的学生
                 while(true) {
                 	b=r.nextInt(30)+61;
-                	if(vis[b]==1) vis[b]=1;
-                	if(vis[b]==1) continue;
+                	if(vis[b]==2) vis[b]=1;
+                	else if(vis[b]==1) continue;
                 	/*if(vis[b]>0) {
                 		vis[b]=1;
                 		continue;
