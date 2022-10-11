@@ -11,10 +11,10 @@ public class Selection {
     // 数据库的用户名与密码，需要根据自己的设置
     static final String USER = "root";
     static final String PASS = "123456";
- 
+    static int record[] = new int[6];
+    static int first=1;
+    
     public static void main(String[] args) {
-        con_mysql c=new con_mysql();
-        c.main(args);
     	Connection conn = null;
         Statement stmt = null;
         try{
@@ -37,88 +37,121 @@ public class Selection {
             int vis[] = new int[91];		//下表即代表学号，范围[1,90],vis[]=1表示在本次抽点中已被抽点过
             
             while(course<5) {
+            	con_mysql c=new con_mysql();
+            	c.main(args);
                 int count1=0;
                 int count2=0;
                 int count3=0;
-                ResultSet rs;
-                for(int i=0;i<91;i++) {
-                	if(vis[i]!=2) vis[i]=0;
-                }
-                //抽点 3.* 层次的学生
-                while(true) {
-                	b=r.nextInt(15)+1;	//随机范围[0,15)
-                	if(vis[b]==2) vis[b]=1;
-                	else if(vis[b]==1) continue;
+                int shoot=0;
+                ResultSet rs= null;
+                if(first==1) {
+                    //抽点 3.* 层次的学生
+                    while(true) {
+                    	b=r.nextInt(15)+1;	//随机范围[0,15)
+                    	if(vis[b]==1) continue;
+                    	vis[b]=1;
+                    	sql = "select id,score,attendance from class1 where id="+b+" ";
+                        rs = stmt.executeQuery(sql);	
+                        if(rs.next()) {
+                        	int id  = rs.getInt("id");
+                            String s=rs.getString("score");
+                            int attendance = rs.getInt("attendance");
+                            count1++;
+                            if(attendance==0) {
+                            	shoot++;
+                            	System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                            	break;
+                            }
+                        }
+                    }
+                    
+                    //抽点 2.* 层次的学生
+                    while(true) {
+                    	if(count2==11) break;		
+                    	b=r.nextInt(45)+16;
+                    	if(vis[b]==1) continue;
+                    	vis[b]=1;
+                    	sql = "select id,score,attendance from class1 where id="+b+" ";
+                        rs = stmt.executeQuery(sql);	
+                        if(rs.next()) {
+                        	int id  = rs.getInt("id");
+                            String s=rs.getString("score");
+                            int attendance = rs.getInt("attendance");
+                            count2++;
+                            if(attendance==0) {
+                            	shoot++;
+                            	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                            	 break;
+                            }
+                        }
+                       
+                    }
+                    //抽点 1.* 层次的学生
+                    while(true) {
+                    	b=r.nextInt(30)+61;
+                    	if(vis[b]==1) continue;
 
-                	vis[b]=1;
-                	sql = "select id,score,attendance from class1 where id="+b+" ";
-                    rs = stmt.executeQuery(sql);	
-                    if(rs.next()) {
-                    	int id  = rs.getInt("id");
-                        String s=rs.getString("score");
-                        int attendance = rs.getInt("attendance");
-                        count1++;
-                        if(attendance==0) {
-                        	vis[b]=2;		//缺勤被抽到就使vis[b]=2,下次点名不点这个学生
-                        	System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
-                        	break;
+                    	vis[b]=1;
+                    	sql = "select id,score,attendance from class1 where id="+b+" ";
+                        rs = stmt.executeQuery(sql);	
+                        if(rs.next()) {
+                        	int id  = rs.getInt("id");
+                            String s=rs.getString("score");
+                            int attendance = rs.getInt("attendance");
+                            count3++;
+                            if(attendance==0) {
+                            	shoot++;
+                            	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                            	 break;
+                            }
                         }
                     }
+                    first=0;
                 }
-                
-                //抽点 2.* 层次的学生
-                while(true) {
-                	 if(count2==11) break;		//对抽点人数进行约束，如果抽了10个人还没抽到，就别抽了
-    											//因为另外两层的平均抽取次数是8、10，第二层如果抽了18个人还没抽到
-    											//E=2/36,已经等于全点情况的E值，是最差的情况了
-                	b=r.nextInt(45)+16;
-                	if(vis[b]==2) vis[b]=1;
-                	else if(vis[b]==1) continue;
-
-                	vis[b]=1;
-                	sql = "select id,score,attendance from class1 where id="+b+" ";
-                    rs = stmt.executeQuery(sql);	
-                    if(rs.next()) {
-                    	int id  = rs.getInt("id");
-                        String s=rs.getString("score");
-                        int attendance = rs.getInt("attendance");
-                        count2++;
-                        if(attendance==0) {
-                        	vis[b]=2;
-                        	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
-                        	 break;
+                else {
+                	for(int i=0;i<6;i++) {
+                		int a=record[i];
+                		vis[a]=1;
+                		sql = "select id,score,attendance from class1 where id="+a+" ";
+                        rs = stmt.executeQuery(sql);	
+                        if(rs.next()) {
+                        	int id  = rs.getInt("id");
+                            String s=rs.getString("score");
+                            int attendance = rs.getInt("attendance");
+                            if(record[i]<=15) count1++;
+                            else if(record[i]<=60) count2++;
+                            else count3++;
+                            if(attendance==0) {
+                            	shoot++;
+                            	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                            }
+                        }
+                	}
+                    //抽点 1.* 层次的学生
+                    while(true) {
+                    	if(count3>=5) break;
+                    	b=r.nextInt(30)+61;
+                    	if(vis[b]==1) continue;
+                    	vis[b]=1;
+                    	sql = "select id,score,attendance from class1 where id="+b+" ";
+                        rs = stmt.executeQuery(sql);	
+                        if(rs.next()) {
+                        	int id  = rs.getInt("id");
+                            String s=rs.getString("score");
+                            int attendance = rs.getInt("attendance");
+                            count3++;
+                            if(attendance==0) {
+                            	shoot++;
+                            	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
+                            	 break;
+                            }
                         }
                     }
-                   
-                }
-                //抽点 1.* 层次的学生
-                while(true) {
-                	b=r.nextInt(30)+61;
-                	if(vis[b]==2) vis[b]=1;
-                	else if(vis[b]==1) continue;
-                	/*if(vis[b]>0) {
-                		vis[b]=1;
-                		continue;
-                	}*/
-                	vis[b]=1;
-                	sql = "select id,score,attendance from class1 where id="+b+" ";
-                    rs = stmt.executeQuery(sql);	
-                    if(rs.next()) {
-                    	int id  = rs.getInt("id");
-                        String s=rs.getString("score");
-                        int attendance = rs.getInt("attendance");
-                        count3++;
-                        if(attendance==0) {
-                        	vis[b]=2;
-                        	 System.out.println("ID: " + id + ", 绩点:" + s + ", 出勤情况: " + attendance);
-                        	 break;
-                        }
-                    }
+                	
                 }
                 //在控制台输出结果
                 System.out.println("count1="+ count1 + ", count2=" + count2 + ", count3=" + count3);
-                if(count2==10) System.out.println("E = " + 2.0/(count1+count2+count3));
-                else System.out.println("E = " + 3.0/(count1+count2+count3));
+                System.out.println("E = " + (shoot*1.0)/(count1+count2+count3));
                 System.out.println();
                 
                 rs.close();
@@ -147,6 +180,8 @@ public class Selection {
         }
         System.out.println("Goodbye!");
     }	
-
+    
+    public static void recall(int[] arr) {
+    	for(int i=0;i<6;i++) record[i]=arr[i];
+    }
 }
-
